@@ -1,16 +1,27 @@
-import { Stack, StackProps } from 'aws-cdk-lib';
-import { Construct } from 'constructs';
-// import * as sqs from 'aws-cdk-lib/aws-sqs';
+import {Stack, StackProps} from 'aws-cdk-lib';
+import {Construct} from 'constructs';
+import * as lambda from '@aws-cdk/aws-lambda-python-alpha';
+import {Runtime} from "aws-cdk-lib/aws-lambda";
 
 export class PythonLayerExampleStack extends Stack {
-  constructor(scope: Construct, id: string, props?: StackProps) {
-    super(scope, id, props);
+    constructor(scope: Construct, id: string, props?: StackProps) {
+        super(scope, id, props);
+        // const layer = new lambda.PythonLayerVersion(this, 'PythonLayer', {
+        //     entry: './assets/lambda_layers/root_layer',
+        //     compatibleRuntimes: [Runtime.PYTHON_3_9]
+        // });
+        //
+        const helloHandler = new lambda.PythonFunction(this, 'HelloHandler', {
+            entry: './assets/lambda_handlers/hello',
+            runtime: Runtime.PYTHON_3_9,
+            layers: [
+                new lambda.PythonLayerVersion(this, 'PythonLayer', {
+                    entry: './assets/lambda_layers/root_layer',
+                    compatibleRuntimes: [Runtime.PYTHON_3_9]
+                })
+            ]
+        });
 
-    // The code that defines your stack goes here
 
-    // example resource
-    // const queue = new sqs.Queue(this, 'PythonLayerExampleQueue', {
-    //   visibilityTimeout: cdk.Duration.seconds(300)
-    // });
-  }
+    }
 }
