@@ -5,14 +5,21 @@
     "python-layer-example": "bin/python-layer-example.js"
   },
   "scripts": {
-    "prebuild": "cd assets/lambda_layers/root_layer && poetry install && cd -",
     "build": "tsc",
     "watch": "tsc -w",
     "test": "jest",
     "cdk": "cdk",
     "prebootstrap:local": "npm run build",
     "bootstrap:local": "cdklocal bootstrap",
-    "deploy:local": "cdklocal deploy"
+    "predeploy:local": "npm run build",
+    "deploy:local": "cdklocal deploy",
+    "lint": "gts lint",
+    "clean": "gts clean",
+    "compile": "tsc",
+    "fix": "gts fix",
+    "prepare": "npm run compile",
+    "pretest": "npm run compile",
+    "posttest": "npm run lint"
   },
   "devDependencies": {
     "@types/jest": "^27.4.1",
@@ -22,7 +29,8 @@
     "aws-cdk": "^2.15.0",
     "aws-cdk-local": "^2.14.0",
     "ts-node": "^10.6.0",
-    "typescript": "^4.6.2"
+    "typescript": "^4.6.2",
+    "gts": "^3.1.0"
   },
   "dependencies": {
     "aws-cdk-lib": "^2.15.0",
